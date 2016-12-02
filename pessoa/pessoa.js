@@ -142,4 +142,30 @@ router.post('/artigo', function (req, res) {
     });
 });
 
+router.post('/id', function (req, res) {
+    var pessoa = req.body;
+
+    MongoClient.connect(url, function (err, db) {
+        assert.equal(null, err);
+
+        var col = db.collection('pmlsSuspeitos');
+
+        col.findOne({_id: objectId(pessoa._id) },function (err, vcl) {
+            if (err) {
+                db.close();
+                res.status(500);
+            }
+            if (vcl) {
+                db.close();
+                res.json(vcl);
+            }
+            else {
+                db.close();
+                res.status(500);
+            }
+
+        });
+    });
+});
+
 module.exports = router;
