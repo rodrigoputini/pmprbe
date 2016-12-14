@@ -5,7 +5,8 @@ var login = require('./login/login');
 var menu = require('./menu/menu');
 var users = require('./users/users');
 var veiculo = require('./veiculo/veiculo');
-
+var endereco = require('./endereco/endereco');
+var artigo = require('./artigo/artigo');
 
 app.all('*', function(req, res, next) {
        res.header('Access-Control-Allow-Origin', '*');
@@ -28,6 +29,8 @@ app.use('/login',login);
 app.use('/menu',menu);
 app.use('/users',users);
 app.use('/veiculo',veiculo);
+app.use('/endereco',endereco);
+app.use('/artigo',artigo);
 
 app.listen(3000, function () {
   console.log('App PMLS backend running on port 3000!');

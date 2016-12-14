@@ -150,20 +150,55 @@ router.post('/id', function (req, res) {
 
         var col = db.collection('pmlsSuspeitos');
 
-        col.findOne({_id: objectId(pessoa._id) },function (err, vcl) {
+        col.findOne({'_id': objectId(pessoa._id) },function (err, pes) {
             if (err) {
                 db.close();
                 res.status(500);
             }
-            if (vcl) {
+            if (pes) {
                 db.close();
-                res.json(vcl);
+                res.json(pes);
             }
             else {
                 db.close();
                 res.status(500);
             }
 
+        });
+    });
+});
+
+//update a document
+router.post('/update', function (req, res) {
+    var pessoa =   req.body;
+    var id = pessoa._id;
+    if(id){
+        delete pessoa._id;
+    }
+    MongoClient.connect(url, function (err, db) {
+        assert.equal(null, err);
+        var col = db.collection('pmlsSuspeitos');
+        col.update({ _id : objectId(id)},
+          {$set:pessoa}, function(err, result) {
+          assert.equal(err, null);
+          assert.equal(1, result.result.n);
+          db.close();
+          res.send("ok");
+        });
+    });
+});
+
+//insert a document
+router.post('/insert', function (req, res) {
+    var pessoa =   req.body;
+    MongoClient.connect(url, function (err, db) {
+        assert.equal(null, err);
+        var col = db.collection('pmlsSuspeitos');
+        col.insertOne(pessoa, function(err, result) {
+          assert.equal(err, null);
+          assert.equal(1, result.result.n);
+          db.close();
+          res.send("ok");
         });
     });
 });
